@@ -1,121 +1,125 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import React from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
+import { AuthProvider } from './contexts/AuthContext';
+import { ProtectedRoute } from './components/common/ProtectedRoute';
+
+// ─── Layouts ────────────────────────────────────────────────────────────
+import AdminLayout    from './layouts/AdminLayout';
+import StaffLayout    from './layouts/StaffLayout';
+import CustomerLayout from './layouts/CustomerLayout';
+
+// ─── Auth Pages ─────────────────────────────────────────────────────────
+import Login          from './pages/auth/Login';
+import Register       from './pages/auth/Register';
+import ChangePassword from './pages/auth/ChangePassword';
+import Chat           from './pages/common/Chat';
+
+// ─── Admin Pages ─────────────────────────────────────────────────────────
+import AdminDashboard    from './pages/admin/AdminDashboard';
+import StaffManagement   from './pages/admin/StaffManagement';
+import PartsManagement   from './pages/admin/PartsManagement';
+import VendorsManagement from './pages/admin/VendorsManagement';
+import PurchaseInvoices  from './pages/admin/PurchaseInvoices';
+import FinancialReports  from './pages/admin/FinancialReports';
+import Notifications     from './pages/admin/Notifications';
+import CustomerReviews   from './pages/admin/CustomerReviews';
+
+// ─── Staff Pages ─────────────────────────────────────────────────────────
+import StaffDashboard    from './pages/staff/StaffDashboard';
+import RegisterCustomer  from './pages/staff/RegisterCustomer';
+import SalesInvoices     from './pages/staff/SalesInvoices';
+import CustomerSearch    from './pages/staff/CustomerSearch';
+import CustomerReports   from './pages/staff/CustomerReports';
+import StaffAppointments  from './pages/staff/StaffAppointments';
+import AvailableParts     from './pages/staff/AvailableParts';
+import StaffPartRequests  from './pages/staff/StaffPartRequests';
+
+// ─── Customer Pages ───────────────────────────────────────────────────────
+import CustomerDashboard from './pages/customer/CustomerDashboard';
+import Profile           from './pages/customer/Profile';
+import Vehicles          from './pages/customer/Vehicles';
+import Appointments      from './pages/customer/Appointments';
+import History           from './pages/customer/History';
+import PartRequests      from './pages/customer/PartRequests';
+import Reviews           from './pages/customer/Reviews';
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <BrowserRouter>
+      <AuthProvider>
+        <Toaster
+          position="top-right"
+          toastOptions={{
+            style: {
+              background: '#1e293b',
+              color: '#f1f5f9',
+              border: '1px solid rgba(255,255,255,.1)',
+              borderRadius: '10px',
+              fontSize: '.9rem',
+            },
+            success: { iconTheme: { primary: '#10b981', secondary: '#1e293b' } },
+            error:   { iconTheme: { primary: '#ef4444', secondary: '#1e293b' } },
+          }}
+        />
+        <Routes>
+          {/* Default redirect */}
+          <Route path="/" element={<Navigate to="/login" replace />} />
 
-      <div className="ticks"></div>
+          {/* Public auth routes */}
+          <Route path="/login"    element={<Login />} />
+          <Route path="/register" element={<Register />} />
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+          {/* ── Admin routes ────────────────────────────────────────── */}
+          <Route element={<ProtectedRoute allowedRoles={['Admin']} />}>
+            <Route path="/admin" element={<AdminLayout />}>
+              <Route index                  element={<AdminDashboard />} />
+              <Route path="staff"           element={<StaffManagement />} />
+              <Route path="parts"           element={<PartsManagement />} />
+              <Route path="vendors"         element={<VendorsManagement />} />
+              <Route path="purchase-invoices" element={<PurchaseInvoices />} />
+              <Route path="reports"         element={<FinancialReports />} />
+              <Route path="notifications"   element={<Notifications />} />
+              <Route path="reviews"         element={<CustomerReviews />} />
+              <Route path="chat"            element={<Chat />} />
+              <Route path="change-password" element={<ChangePassword />} />
+            </Route>
+          </Route>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+          {/* ── Staff routes ─────────────────────────────────────────── */}
+          <Route element={<ProtectedRoute allowedRoles={['Staff']} />}>
+            <Route path="/staff" element={<StaffLayout />}>
+              <Route index                       element={<StaffDashboard />} />
+              <Route path="register-customer"    element={<RegisterCustomer />} />
+              <Route path="appointments"         element={<StaffAppointments />} />
+              <Route path="parts"                element={<AvailableParts />} />
+              <Route path="part-requests"        element={<StaffPartRequests />} />
+              <Route path="sales"                element={<SalesInvoices />} />
+              <Route path="customers"            element={<CustomerSearch />} />
+              <Route path="reports"              element={<CustomerReports />} />
+              <Route path="chat"                 element={<Chat />} />
+              <Route path="change-password"      element={<ChangePassword />} />
+            </Route>
+          </Route>
+
+          {/* ── Customer routes ───────────────────────────────────────── */}
+          <Route element={<ProtectedRoute allowedRoles={['Customer']} />}>
+            <Route path="/customer" element={<CustomerLayout />}>
+              <Route index                element={<CustomerDashboard />} />
+              <Route path="profile"       element={<Profile />} />
+              <Route path="vehicles"      element={<Vehicles />} />
+              <Route path="appointments"  element={<Appointments />} />
+              <Route path="parts"         element={<AvailableParts />} />
+              <Route path="history"       element={<History />} />
+              <Route path="requests"      element={<PartRequests />} />
+              <Route path="reviews"       element={<Reviews />} />
+              <Route path="change-password" element={<ChangePassword />} />
+            </Route>
+          </Route>
+        </Routes>
+      </AuthProvider>
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;
